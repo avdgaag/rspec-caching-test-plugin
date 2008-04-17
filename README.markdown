@@ -12,7 +12,7 @@ This is basic but useful stuff, extracted from one of my projects. These are the
   * ... `expire_action(action)`
   * ... `expire_fragment(name)`
 
-Note that `cache_action` and `cache_fragment` are the same thing, only `cache_action` turns your `action` argument into the right `name` using `fragment_cache_key`. See the Rails docs for more info.
+Note that `cache_action` and `cache_fragment` are the same thing, only `cache_action` turns your `action` argument into the right `name` using `fragment_cache_key`. [See the Rails docs for more info](http://api.rubyonrails.org/classes/ActionController/Caching/Fragments.html#M000259 "Module: ActionController::Caching::Fragments").
 
 ## Installation
 

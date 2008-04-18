@@ -375,7 +375,7 @@ module AGW #:nodoc:
 
         def failure_message
           reason = if ActionController::Base.cache_store.expired.any?
-            "the cache has only expired #{ActionController::Base.cache_store.cached.to_yaml}."
+            "the cache has only expired #{ActionController::Base.cache_store.expired.to_yaml}."
           else
             "nothing was expired."
           end

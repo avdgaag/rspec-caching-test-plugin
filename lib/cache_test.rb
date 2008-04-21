@@ -291,8 +291,8 @@ module AGW #:nodoc:
     # something else.
     module Matchers
       class TestCacheCaches #:nodoc:
-        def initialize(name, controller)
-          @name = name
+        def initialize(name, controller = nil)
+          @name       = name
           @controller = controller
           ActionController::Base.cache_store.reset
         end
@@ -306,7 +306,8 @@ module AGW #:nodoc:
         # request.
         def matches?(block)
           block.call
-          return ActionController::Base.cache_store.cached?(@controller.fragment_cache_key(@name))
+          @key = @name.is_a?(String) ? @name : @controller.fragment_cache_key(@name)
+          return ActionController::Base.cache_store.cached?(@key)
         end
 
         def failure_message
@@ -315,11 +316,11 @@ module AGW #:nodoc:
           else
             "the cache is empty."
           end
-          "Expected block to cache action #{@name.inspect}, but #{reason}"
+          "Expected block to cache action #{@name.inspect} (#{@key}), but #{reason}"
         end
 
         def negative_failure_message
-          "Expected block not to cache action #{@name.inspect}"
+          "Expected block not to cache action #{@name.inspect} (#{@key})"
         end
       end
 
@@ -333,11 +334,9 @@ module AGW #:nodoc:
       # interpreted in the context of the current controller. Alternatively,
       # you can pass in a whole +Hash+ for +url_for+ defining all your
       # paramaters.
-      #
-      # This is a shortcut/convenience method to +cache+.
       def cache_action(action)
         action = { :action => action } unless action.is_a?(Hash)
-        cache(action)
+        TestCacheCaches.new(action, controller)
       end
       
       # See if a fragment gets cached.
@@ -350,7 +349,7 @@ module AGW #:nodoc:
       #   lambda { get :index }.should cache('my_caching')
       # 
       def cache(name)
-        TestCacheCaches.new(name, controller)
+        TestCacheCaches.new(name)
       end
       alias_method :cache_fragment, :cache
       
@@ -370,7 +369,8 @@ module AGW #:nodoc:
         # request.
         def matches?(block)
           block.call
-          return ActionController::Base.cache_store.expired?(@controller.fragment_cache_key(@name))
+          @key = @name.is_a?(String) ? @name : @controller.fragment_cache_key(@name)
+          return ActionController::Base.cache_store.expired?(@key)
         end
 
         def failure_message
@@ -379,11 +379,11 @@ module AGW #:nodoc:
           else
             "nothing was expired."
           end
-          "Expected block to expire action #{@name.inspect}, but #{reason}"
+          "Expected block to expire action #{@name.inspect} (#{@key}), but #{reason}"
         end
 
         def negative_failure_message
-          "Expected block not to expire #{@name.inspect}"
+          "Expected block not to expire #{@name.inspect} (#{@key})"
         end
       end
 

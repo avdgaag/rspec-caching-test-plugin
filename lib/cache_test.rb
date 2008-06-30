@@ -461,7 +461,11 @@ module AGW #:nodoc:
         end
 
         def failure_message
-          "Expected block to expire the page #{@url.inspect}"
+          if ActionController::Base.test_page_expired.any?
+            "Expected block to expire the page #{@url.inspect} but it only expired #{ActionController::Base.test_page_expired.to_yaml}"
+          else
+            "Expected block to expire the page #{@url.inspect} but it expired nothing"
+          end
         end
 
         def negative_failure_message

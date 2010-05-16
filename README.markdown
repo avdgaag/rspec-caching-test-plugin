@@ -1,3 +1,5 @@
+NOTE: This project is outdated. I have not used this plugin for a long time, nor has it been tested in the latest version of Rails and Rspec. Its use is not recommended. I keep the code online as a reminder of the code I wrote years ago, making the stuff I do today look good.
+
 # Rspec caching test plugin
 
 This plugin helps you test your caching with rspec. It provides you with matchers to test if caching and expiring does what you want it to do. It is
